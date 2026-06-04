@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 # ---------- 1. Load the dataset ----------
 df = pd.read_csv(
-    'SMSSpamCollection',
+    r'C:\Users\ADMIN\Desktop\spam_detector\fakemail\SMSSpamCollection',
     sep='\t',
     header=None,
     names=['label', 'message']
