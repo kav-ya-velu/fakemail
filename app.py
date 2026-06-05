@@ -88,7 +88,18 @@ def index():
 @app.route('/dashboard')
 def dashboard():
     results = get_model_results()
-    return render_template('dashboard.html', results=results)
+    labels     = [r['model']     for r in results]
+    accuracies = [r['accuracy']  for r in results]
+    precisions = [r['precision'] for r in results]
+    recalls    = [r['recall']    for r in results]
+    f1s        = [r['f1']        for r in results]
+    return render_template('dashboard.html',
+                           results=results,
+                           labels=labels,
+                           accuracies=accuracies,
+                           precisions=precisions,
+                           recalls=recalls,
+                           f1s=f1s)
 
 if __name__ == '__main__':
     app.run(debug=True)
