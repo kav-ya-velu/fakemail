@@ -6,16 +6,32 @@
     <title>Spam Detector</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
         body {
             font-family: 'Segoe UI', sans-serif;
             background: #f0f2f5;
             min-height: 100vh;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
         }
-
+        nav {
+            width: 100%;
+            background: #4f46e5;
+            padding: 14px 30px;
+            display: flex;
+            gap: 24px;
+            position: fixed;
+            top: 0;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 15px;
+            opacity: 0.85;
+        }
+        nav a:hover, nav a.active { opacity: 1; text-decoration: underline; }
         .container {
             background: white;
             padding: 40px;
@@ -23,107 +39,60 @@
             box-shadow: 0 4px 20px rgba(0,0,0,0.1);
             width: 100%;
             max-width: 580px;
+            margin-top: 70px;
         }
-
-        h1 {
-            text-align: center;
-            font-size: 26px;
-            margin-bottom: 8px;
-            color: #1a1a2e;
-        }
-
-        .subtitle {
-            text-align: center;
-            color: #666;
-            font-size: 14px;
-            margin-bottom: 30px;
-        }
-
+        h1 { text-align: center; font-size: 26px; margin-bottom: 8px; color: #1a1a2e; }
+        .subtitle { text-align: center; color: #666; font-size: 14px; margin-bottom: 30px; }
         textarea {
-            width: 100%;
-            padding: 14px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 15px;
-            resize: vertical;
-            min-height: 130px;
-            outline: none;
-            transition: border 0.3s;
+            width: 100%; padding: 14px;
+            border: 2px solid #e0e0e0; border-radius: 10px;
+            font-size: 15px; resize: vertical; min-height: 130px;
+            outline: none; transition: border 0.3s;
             font-family: 'Segoe UI', sans-serif;
         }
-
         textarea:focus { border-color: #4f46e5; }
-
         button {
-            width: 100%;
-            padding: 14px;
-            background: #4f46e5;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 14px;
+            width: 100%; padding: 14px;
+            background: #4f46e5; color: white;
+            border: none; border-radius: 10px;
+            font-size: 16px; font-weight: 600;
+            cursor: pointer; margin-top: 14px;
             transition: background 0.3s;
         }
-
         button:hover { background: #4338ca; }
-
         .result {
-            margin-top: 24px;
-            padding: 20px;
-            border-radius: 12px;
-            text-align: center;
+            margin-top: 24px; padding: 20px;
+            border-radius: 12px; text-align: center;
         }
-
-        .result.spam {
-            background: #fff0f0;
-            border: 2px solid #ffcccc;
-        }
-
-        .result.ham {
-            background: #f0fff4;
-            border: 2px solid #b2f5c8;
-        }
-
-        .result-label {
-            font-size: 28px;
-            font-weight: 700;
-            margin-bottom: 6px;
-        }
-
+        .result.spam { background: #fff0f0; border: 2px solid #ffcccc; }
+        .result.ham  { background: #f0fff4; border: 2px solid #b2f5c8; }
+        .result-label { font-size: 28px; font-weight: 700; margin-bottom: 6px; }
         .result.spam .result-label { color: #e53e3e; }
         .result.ham  .result-label { color: #38a169; }
-
-        .result-message {
-            font-size: 13px;
-            color: #555;
-            word-break: break-word;
-        }
-
+        .result-message { font-size: 13px; color: #555; }
         .emoji { font-size: 36px; margin-bottom: 8px; }
     </style>
 </head>
 <body>
+<nav>
+    <a href="/" class="active">🔍 Spam Detector</a>
+    <a href="/dashboard">📊 Model Dashboard</a>
+</nav>
+
 <div class="container">
     <h1>📧 Spam Detector</h1>
     <p class="subtitle">Powered by SVM · Type any message to check</p>
 
     <form method="POST">
-        <textarea
-            name="message"
+        <textarea name="message"
             placeholder="Type or paste a message here..."
-            required
-        >{{ message or '' }}</textarea>
+            required>{{ message or '' }}</textarea>
         <button type="submit">🔍 Check Message</button>
     </form>
 
     {% if prediction %}
     <div class="result {{ prediction | lower }}">
-        <div class="emoji">
-            {% if prediction == 'SPAM' %}🚨{% else %}✅{% endif %}
-        </div>
+        <div class="emoji">{% if prediction == 'SPAM' %}🚨{% else %}✅{% endif %}</div>
         <div class="result-label">{{ prediction }}</div>
         <div class="result-message">
             {% if prediction == 'SPAM' %}
